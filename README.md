@@ -27,3 +27,34 @@ Stand up a lightweight internal workspace for Walden Ridge field teams to captur
 4. Document QA expectations in `packages/wr-standards` (fonts, CSS, header, script).
 5. Track chokepoints in `docs/chokepoints.md`.
 6. Review Phase 1 offline capture in `docs/phase1-offline.md`.
+
+## Deploy (Render + Vercel)
+
+### 1) DocGen on Render (Docker)
+This service needs `pandoc` + `weasyprint`, so we deploy via Docker.
+
+1. Create a new Render Web Service from this repo.
+2. Use the included `render.yaml` (blueprint) or set:
+   - Root directory: repo root
+   - Dockerfile: `services/docgen/Dockerfile`
+3. Set env vars:
+   - `GOOGLE_OAUTH_CLIENT_JSON`
+   - `GOOGLE_OAUTH_TOKEN_JSON`
+   - `GOOGLE_OAUTH_REDIRECT_URI`
+   - `GOOGLE_DRIVE_FOLDER_ID`
+   - `LOCAL_FONT_DIR=/app/packages/wr-standards/assets/fonts`
+   - `WR_CSS_PATH=/app/packages/wr-standards/internal-pdf-style.css`
+
+When deployed, copy the Render service URL (e.g., `https://wr-docgen.onrender.com`).
+
+### 2) Web App on Vercel
+Deploy `apps/web` as a Next.js app.
+
+Env vars:
+- `GOOGLE_OAUTH_CLIENT_JSON`
+- `GOOGLE_OAUTH_TOKEN_JSON`
+- `GOOGLE_OAUTH_REDIRECT_URI`
+- `GOOGLE_SHEET_ID`
+- `GOOGLE_SHEET_NAME=Intakes`
+- `GOOGLE_DRIVE_FOLDER_ID`
+- `DOCGEN_URL=<Render URL>`

@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: walden-ridge-docgen
+    env: docker
+    plan: starter
+    rootDir: .
+    dockerfilePath: services/docgen/Dockerfile
+    envVars:
+      - key: GOOGLE_OAUTH_CLIENT_JSON
+        sync: false
+      - key: GOOGLE_OAUTH_TOKEN_JSON
+        sync: false
+      - key: GOOGLE_OAUTH_REDIRECT_URI
+        sync: false
+      - key: GOOGLE_DRIVE_FOLDER_ID
+        sync: false
+      - key: LOCAL_FONT_DIR
+        value: /app/packages/wr-standards/assets/fonts
+      - key: WR_CSS_PATH
+        value: /app/packages/wr-standards/internal-pdf-style.css
+      - key: WR_RUNNING_HEADER
+        sync: false
