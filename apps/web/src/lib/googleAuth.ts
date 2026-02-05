@@ -26,16 +26,26 @@ function loadOAuthCredentials() {
   return { credentials, redirectUri };
 }
 
-export function getOAuthClient() {
+function loadOAuthToken() {
+  const tokenJson = process.env.GOOGLE_OAUTH_TOKEN_JSON;
   const tokenPath = process.env.GOOGLE_OAUTH_TOKEN_PATH;
+
+  if (tokenJson) {
+    return JSON.parse(tokenJson);
+  }
+
   if (!tokenPath) {
-    throw new Error('Missing GOOGLE_OAUTH_TOKEN_PATH');
+    throw new Error('Missing GOOGLE_OAUTH_TOKEN_PATH or GOOGLE_OAUTH_TOKEN_JSON');
   }
 
   if (!fs.existsSync(tokenPath)) {
     throw new Error('OAuth token not found. Run scripts/google-oauth.js');
   }
 
+  return JSON.parse(fs.readFileSync(tokenPath, 'utf-8'));
+}
+
+export function getOAuthClient() {
   const { credentials, redirectUri } = loadOAuthCredentials();
 
   const oauth = new google.auth.OAuth2(
@@ -44,7 +54,7 @@ export function getOAuthClient() {
     redirectUri
   );
 
-  const token = JSON.parse(fs.readFileSync(tokenPath, 'utf-8'));
+  const token = loadOAuthToken();
   oauth.setCredentials(token);
   return oauth;
 }

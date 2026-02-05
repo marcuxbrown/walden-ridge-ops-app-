@@ -58,16 +58,31 @@ function runQa(markdown: string, wrClass: string) {
   return errors;
 }
 
+function loadOAuthToken() {
+  const tokenJson = process.env.GOOGLE_OAUTH_TOKEN_JSON;
+  const tokenPath = process.env.GOOGLE_OAUTH_TOKEN_PATH;
+
+  if (tokenJson) {
+    return JSON.parse(tokenJson);
+  }
+
+  if (!tokenPath) {
+    throw new Error('Missing GOOGLE_OAUTH_TOKEN_PATH or GOOGLE_OAUTH_TOKEN_JSON');
+  }
+
+  if (!fs.existsSync(tokenPath)) {
+    throw new Error('OAuth token not found. Run scripts/google-oauth.js');
+  }
+
+  return JSON.parse(fs.readFileSync(tokenPath, 'utf-8'));
+}
+
 function getDriveClient() {
   const clientPath = process.env.GOOGLE_OAUTH_CLIENT_PATH;
   const clientJson = process.env.GOOGLE_OAUTH_CLIENT_JSON;
-  const tokenPath = process.env.GOOGLE_OAUTH_TOKEN_PATH;
 
   if (!clientPath && !clientJson) {
     throw new Error('Missing GOOGLE_OAUTH_CLIENT_PATH or GOOGLE_OAUTH_CLIENT_JSON');
-  }
-  if (!tokenPath) {
-    throw new Error('Missing GOOGLE_OAUTH_TOKEN_PATH');
   }
 
   const raw = clientJson
@@ -89,10 +104,7 @@ function getDriveClient() {
     redirectUri
   );
 
-  if (!fs.existsSync(tokenPath)) {
-    throw new Error('OAuth token not found. Run scripts/google-oauth.js');
-  }
-  const token = JSON.parse(fs.readFileSync(tokenPath, 'utf-8'));
+  const token = loadOAuthToken();
   oauth.setCredentials(token);
 
   return google.drive({ version: 'v3', auth: oauth });
