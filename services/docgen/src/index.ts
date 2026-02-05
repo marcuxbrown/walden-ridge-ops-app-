@@ -110,7 +110,15 @@ function getDriveClient() {
   return google.drive({ version: 'v3', auth: oauth });
 }
 
-app.post('/generate', async (req, res) => {
+app.get('/', (_req: any, res: any) => {
+  res.json({
+    service: 'walden-ridge-docgen',
+    status: 'ok',
+    endpoints: ['/health', '/generate']
+  });
+});
+
+app.post('/generate', async (req: any, res: any) => {
   try {
     const { templateId, intakeId, wrClass, payload } = req.body;
     if (!templateId || !intakeId || !wrClass || !payload) {
@@ -198,7 +206,7 @@ app.post('/generate', async (req, res) => {
   }
 });
 
-app.get('/health', (_req, res) => {
+app.get('/health', (_req: any, res: any) => {
   res.json({ status: 'ok', version: 'phase-0' });
 });
 

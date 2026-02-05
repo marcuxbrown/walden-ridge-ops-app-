@@ -7,3 +7,5 @@ node_modules/
 .next/
 .env.save
 env.rtf
+services/docgen/env.env
+services/docgen/dist/

@@ -26,7 +26,5 @@ RUN cd services/docgen && npm run build
 
 WORKDIR /app/services/docgen
 ENV NODE_ENV=production
-ENV PORT=4000
-
 EXPOSE 4000
 CMD ["npm", "start"]

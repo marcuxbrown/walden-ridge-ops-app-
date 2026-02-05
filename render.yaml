@@ -5,6 +5,7 @@ services:
     plan: starter
     rootDir: .
     dockerfilePath: services/docgen/Dockerfile
+    healthCheckPath: /health
     envVars:
       - key: GOOGLE_OAUTH_CLIENT_JSON
         sync: false
