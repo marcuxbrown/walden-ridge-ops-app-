@@ -1,4 +1,32 @@
 services:
+  # Web app (Next.js)
+  - type: web
+    name: walden-ridge-ops-web
+    env: node
+    plan: starter
+    rootDir: apps/web
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GOOGLE_OAUTH_CLIENT_JSON
+        sync: false
+      - key: GOOGLE_OAUTH_TOKEN_JSON
+        sync: false
+      - key: GOOGLE_OAUTH_REDIRECT_URI
+        sync: false
+      - key: GOOGLE_SHEET_ID
+        sync: false
+      - key: GOOGLE_SHEET_NAME
+        value: Intakes
+      - key: GOOGLE_DRIVE_FOLDER_ID
+        sync: false
+      # Set this to the Render URL of the docgen service after blueprint deploy
+      - key: DOCGEN_URL
+        sync: false
+
+  # PDF generator (Docker)
   - type: web
     name: walden-ridge-docgen
     env: docker
