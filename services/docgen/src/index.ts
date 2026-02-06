@@ -15,7 +15,7 @@ dotenv.config();
 const app = express();
 app.use(express.json({ limit: '2mb' }));
 
-const PORT = process.env.PORT ?? 4000;
+const PORT = Number(process.env.PORT ?? 4000);
 // Note: when running via ts-node-dev, __dirname is `services/docgen/src`, so we need to go up 3 levels to reach repo root.
 const TEMPLATE_ROOT = path.resolve(__dirname, '../../../packages/templates');
 const FONT_DIR = process.env.LOCAL_FONT_DIR ?? path.resolve(__dirname, '../../../packages/wr-standards/assets/fonts');
@@ -210,6 +210,6 @@ app.get('/health', (_req: any, res: any) => {
   res.json({ status: 'ok', version: 'phase-0' });
 });
 
-app.listen(PORT, () => {
-  console.log(`DocGen service listening on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`DocGen service listening on 0.0.0.0:${PORT}`);
 });
