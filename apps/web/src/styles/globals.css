@@ -391,13 +391,20 @@ textarea {
 }
 
 .chip {
+  /* chips are <button> elements; override global button styles */
   padding: 9px 14px;
   border-radius: 8px;
   border: 1px solid var(--wr-border);
   background: #fffaf2;
+  color: #1c1c1c; /* ensure text is visible (global button sets color:white) */
   cursor: pointer;
   font-size: 12px;
   letter-spacing: 0.03em;
+}
+
+.chip:focus-visible {
+  outline: 3px solid rgba(10, 102, 255, 0.9);
+  outline-offset: 2px;
 }
 
 .chip-active {
