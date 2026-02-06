@@ -16,6 +16,9 @@ RUN pip3 install --no-cache-dir weasyprint
 
 WORKDIR /app
 
+# tsconfig base is required because services/docgen/tsconfig.json extends it
+COPY tsconfig.base.json ./tsconfig.base.json
+
 COPY services/docgen/package*.json ./services/docgen/
 RUN cd services/docgen && npm ci
 
